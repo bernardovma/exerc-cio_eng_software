@@ -1,14 +1,62 @@
 import re
 
-class CPFValidator:
+class TratamentoDeCPF:
+    """
+    Classe para tratar o CPF.
+
+    Atributos:
+    cpf (str): CPF fornecido pelo usuário.
+    cpf_tratado (str): CPF tratado, sem caracteres especiais.
+    """
+    def __init__(self, cpf) -> None:
+        """
+        Construtor da classe TratamentoDeCPF.
+        
+        Parâmetros:
+        cpf (str): CPF fornecido pelo usuário.
+        """
+        self.cpf = cpf
+        self.cpf_tratado = self.tratar_cpf(cpf)
+
+    def tratar_cpf(self, cpf) -> str:
+        """
+        Método para tratar o CPF fornecido pelo usuário.
+
+        Parâmetros:
+        cpf (str): CPF fornecido pelo usuário.
+
+        Retorno:
+        str: CPF tratado, sem caracteres especiais.
+        """
+        return re.sub(r"\D", "", cpf)
+
+class CPFValidator(TratamentoDeCPF):
+    """
+    Classe para validar o CPF.
    
-    def __init__(self, cpf):
-        self.cpf = self.cpf_limpo(cpf)
+    Atributos:
+    cpf (str): CPF fornecido pelo usuário.
+    cpf_tratado (str): CPF tratado, sem caracteres especiais.
+    """ 
+    def __init__(self, cpf) -> None:
+        """
+        Construtor da classe CPFValidator.
 
-    def cpf_limpo(self, cpf):
-        return re.sub(r"[^0-9]", "", cpf)
+        Parâmetros:
+        cpf (str): CPF fornecido pelo usuário.
+        """
 
-    def digitos_verificadores(self):
+        # Chamando o construtor da classe de TratamentoDeCPF para tratar o CPF fornecido pelo usuário.
+        super().__init__(cpf)
+        self.cpf = self.cpf_tratado
+
+    def digitos_verificadores(self) -> tuple:
+        """
+        Método para calcular os dígitos verificadores do CPF. Utiliza o cpf tratado fornecido pelo usuário no construtor da classe.
+
+        Retorno:
+        tuple: Dígitos verificadores do CPF.
+        """
         cpf_sem_digitos_verificadores = self.cpf[:9]
         nr_digitos = 10
         digito_calculado = 0
@@ -42,7 +90,13 @@ class CPFValidator:
 
         return digito_verificador_1, digito_verificador_2
     
-    def cpf_valido(self):
+    def cpf_valido(self) -> bool:
+        """
+        Método para validar o CPF fornecido pelo usuário.
+
+        Retorno:
+        bool: True se o CPF for válido, False se o CPF for inválido.
+        """
         if self.cpf == self.cpf[0] * len(self.cpf):
             return False
         
@@ -51,8 +105,7 @@ class CPFValidator:
 
         return int(self.cpf[9]) == digito_verificador_1 and int(self.cpf[10]) == digito_verificador_2
 
-def main():
-
+def main() -> None:
     cpf_fornecido = input("Formato para inserir CPF - XXX.XXX.XXX-XX: ")
     
     cpf_validator = CPFValidator(cpf_fornecido)
