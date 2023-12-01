@@ -107,7 +107,7 @@ class CPFValidator(TratamentoDeCPF):
 
 def main() -> None:
     cpf_fornecido = input("Formato para inserir CPF - XXX.XXX.XXX-XX: ")
-    
+
     cpf_validator = CPFValidator(cpf_fornecido)
     
     if cpf_validator.cpf_valido():
